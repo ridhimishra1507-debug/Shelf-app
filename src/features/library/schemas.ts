@@ -19,8 +19,7 @@ const optionalIsoDateSchema = z.preprocess(
 
 const optionalRatingSchema = z.preprocess(
   emptyStringToUndefined,
-  z
-    .coerce
+  z.coerce
     .number()
     .min(0.5, 'Rating must be at least 0.5.')
     .max(5, 'Rating cannot exceed 5.')
@@ -34,7 +33,10 @@ const optionalPageSchema = z.preprocess(
 );
 
 const optionalNotesSchema = z
-  .preprocess(emptyStringToUndefined, z.string().trim().max(5000, 'Notes must be 5,000 characters or fewer.').optional())
+  .preprocess(
+    emptyStringToUndefined,
+    z.string().trim().max(5000, 'Notes must be 5,000 characters or fewer.').optional(),
+  )
   .transform((value) => value ?? null);
 
 export const libraryItemIdSchema = z.string().uuid('Invalid library item.');

@@ -27,12 +27,16 @@ export function LibraryCard({ item }: LibraryCardProps) {
                 {item.title}
               </Link>
             </h2>
-            <p className="mt-1 text-sm text-stone-600">{item.authors.join(', ') || 'Unknown author'}</p>
+            <p className="mt-1 text-sm text-stone-600">
+              {item.authors.join(', ') || 'Unknown author'}
+            </p>
           </div>
           <StatusBadge status={item.status} />
         </div>
         <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-sm text-stone-600">
-          {item.rating !== null ? <span aria-label={`Rated ${item.rating} out of 5`}>★ {item.rating}/5</span> : null}
+          {item.rating !== null ? (
+            <span aria-label={`Rated ${item.rating} out of 5`}>★ {item.rating}/5</span>
+          ) : null}
           {progress ? <span>{progress}</span> : null}
         </div>
         <Link

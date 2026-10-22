@@ -14,7 +14,9 @@ const statusClassNames: Record<ReadingStatus, string> = {
 
 export function StatusBadge({ status }: StatusBadgeProps) {
   return (
-    <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${statusClassNames[status]}`}>
+    <span
+      className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${statusClassNames[status]}`}
+    >
       {getReadingStatusLabel(status)}
     </span>
   );

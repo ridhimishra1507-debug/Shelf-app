@@ -51,9 +51,14 @@ export async function addBookToLibrary(
 
   const { error } = await supabase.rpc('add_book_to_library', {
     p_authors: parsedBook.data.authors,
+    p_categories: parsedBook.data.categories,
     p_cover_url: parsedBook.data.coverUrl,
     p_description: parsedBook.data.description,
+    p_isbn_10: parsedBook.data.isbn10,
+    p_isbn_13: parsedBook.data.isbn13,
+    p_language: parsedBook.data.language,
     p_page_count: parsedBook.data.pageCount,
+    p_publisher: parsedBook.data.publisher,
     p_provider: parsedBook.data.provider,
     p_provider_book_id: parsedBook.data.providerBookId,
     p_published_date: parsedBook.data.publishedDate,

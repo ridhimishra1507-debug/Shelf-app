@@ -11,7 +11,10 @@ type LibraryItemEditorProps = {
 };
 
 export function LibraryItemEditor({ item }: LibraryItemEditorProps) {
-  const [state, formAction, isPending] = useActionState(updateLibraryItem, initialLibraryActionState);
+  const [state, formAction, isPending] = useActionState(
+    updateLibraryItem,
+    initialLibraryActionState,
+  );
 
   return (
     <div className="grid gap-6">
@@ -103,7 +106,10 @@ export function LibraryItemEditor({ item }: LibraryItemEditorProps) {
           </p>
         ) : null}
         {state.message ? (
-          <p aria-live="polite" className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+          <p
+            aria-live="polite"
+            className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
+          >
             {state.message}
           </p>
         ) : null}
@@ -119,7 +125,10 @@ export function LibraryItemEditor({ item }: LibraryItemEditorProps) {
 
       <form action={removeLibraryItem}>
         <input name="libraryItemId" type="hidden" value={item.id} />
-        <button className="text-sm font-semibold text-red-700 underline underline-offset-4 hover:text-red-900" type="submit">
+        <button
+          className="text-sm font-semibold text-red-700 underline underline-offset-4 hover:text-red-900"
+          type="submit"
+        >
           Remove from library
         </button>
       </form>
