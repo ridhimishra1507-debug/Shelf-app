@@ -1,0 +1,2 @@
+-- Intentionally empty: the foundation contains no application schema or seed data.
+-- Add deterministic local development data only when a feature needs it.
