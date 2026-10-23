@@ -126,16 +126,29 @@ export async function updateLibraryItem(
   return { message: 'Book details saved.' };
 }
 
-export async function removeLibraryItem(formData: FormData) {
+export async function removeLibraryItem(
+  _previousState: LibraryActionState,
+  formData: FormData,
+): Promise<LibraryActionState> {
   const parsed = libraryItemIdSchema.safeParse(formData.get('libraryItemId'));
 
   if (!parsed.success) {
-    redirect('/library');
+    return { error: 'This book is no longer available in your library.' };
   }
 
   const { supabase } = await requireUser();
-  await supabase.from('library_items').delete().eq('id', parsed.data);
+  const { data: removed, error } = await supabase
+    .from('library_items')
+    .delete()
+    .eq('id', parsed.data)
+    .select('id')
+    .maybeSingle();
+
+  if (error || !removed) {
+    return { error: 'Unable to remove this book. Please try again.' };
+  }
 
   revalidatePath('/library');
+  revalidatePath(`/library/${parsed.data}`);
   redirect('/library');
 }

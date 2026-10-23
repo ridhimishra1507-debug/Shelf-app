@@ -15,6 +15,10 @@ export function LibraryItemEditor({ item }: LibraryItemEditorProps) {
     updateLibraryItem,
     initialLibraryActionState,
   );
+  const [removeState, removeFormAction, isRemoving] = useActionState(
+    removeLibraryItem,
+    initialLibraryActionState,
+  );
 
   return (
     <div className="grid gap-6">
@@ -123,13 +127,22 @@ export function LibraryItemEditor({ item }: LibraryItemEditorProps) {
         </button>
       </form>
 
-      <form action={removeLibraryItem}>
+      <form action={removeFormAction}>
         <input name="libraryItemId" type="hidden" value={item.id} />
+        {removeState.error ? (
+          <p
+            aria-live="polite"
+            className="mb-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-800"
+          >
+            {removeState.error}
+          </p>
+        ) : null}
         <button
-          className="text-sm font-semibold text-red-700 underline underline-offset-4 hover:text-red-900"
+          className="text-sm font-semibold text-red-700 underline underline-offset-4 hover:text-red-900 disabled:cursor-not-allowed disabled:opacity-60"
+          disabled={isRemoving}
           type="submit"
         >
-          Remove from library
+          {isRemoving ? 'Removing…' : 'Remove from library'}
         </button>
       </form>
     </div>

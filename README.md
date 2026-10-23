@@ -4,9 +4,10 @@ Shelf is a visual personal book-library application. It will let readers maintai
 library, organize books by reading status and custom shelves, and browse their collection as a
 digital bookshelf or compact list.
 
-This repository currently contains the product foundation only. Authentication, the book library,
-book search, imports, OCR, and bookshelf recognition are deliberately out of scope until their
-respective implementation phases.
+Shelf currently supports email/password authentication and a private personal library. Signed-in
+readers can search Google Books and Open Library, add results to their library, update reading
+status, rating, notes, and page progress, and remove books. Imports, OCR, and bookshelf
+recognition remain out of scope.
 
 ## Tech stack
 
@@ -16,8 +17,8 @@ respective implementation phases.
 - ESLint and Prettier
 - Vitest for unit tests
 
-The application will use Supabase Auth, Postgres, and Storage in later phases. No Supabase client
-or production credential is included at this stage.
+The application uses Supabase Auth and Postgres for the private library. No production credentials
+are included in this repository.
 
 ## Prerequisites
 
@@ -81,9 +82,9 @@ npm run build          # Create the production build
 ## Planned phases
 
 1. Foundation: project setup, local Supabase configuration, migrations, quality tooling.
-2. Private-library MVP: authentication, book search/manual entry, statuses, custom shelves,
-   reading metadata, responsive bookshelf and list views.
-3. Library quality: filtering, sorting, bulk operations, detail views, account data controls.
+2. Core personal library: authentication, catalog search, private library items, statuses, reading
+   metadata, and detail views.
+3. Library quality: filtering, sorting, custom shelves, bulk operations, and account data controls.
 4. Structured imports: plain text, CSV/XLSX parsing, catalog matching, and review/confirm flow.
 5. Image imports: private uploads, asynchronous OCR, candidate matching, and review.
 6. Physical-bookshelf recognition and optional product expansion.
