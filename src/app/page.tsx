@@ -12,9 +12,9 @@ export default function Home() {
         <div className="mt-7 flex flex-wrap justify-center gap-3">
           <Link
             className="rounded-lg bg-stone-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-stone-700"
-            href="/library"
+            href="/search"
           >
-            Open my library
+            Search books
           </Link>
           <Link
             className="rounded-lg border border-stone-300 bg-white px-4 py-2.5 text-sm font-semibold text-stone-800 transition hover:border-stone-500"

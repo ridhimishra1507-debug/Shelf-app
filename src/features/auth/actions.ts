@@ -3,6 +3,7 @@
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+import { hasSupabasePublicConfig } from '@/lib/supabase/config';
 import { createClient } from '@/lib/supabase/server';
 
 import { authCredentialsSchema } from './schemas';
@@ -39,6 +40,10 @@ export async function signIn(
   _previousState: AuthActionState,
   formData: FormData,
 ): Promise<AuthActionState> {
+  if (!hasSupabasePublicConfig()) {
+    return { error: 'Shelf is not connected to Supabase yet. Try again after it is configured.' };
+  }
+
   const parsed = getFormCredentials(formData);
 
   if (!parsed.success) {
@@ -59,6 +64,10 @@ export async function signUp(
   _previousState: AuthActionState,
   formData: FormData,
 ): Promise<AuthActionState> {
+  if (!hasSupabasePublicConfig()) {
+    return { error: 'Shelf is not connected to Supabase yet. Try again after it is configured.' };
+  }
+
   const parsed = getFormCredentials(formData);
 
   if (!parsed.success) {
@@ -86,6 +95,10 @@ export async function signUp(
 }
 
 export async function signOut() {
+  if (!hasSupabasePublicConfig()) {
+    redirect('/');
+  }
+
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect('/');

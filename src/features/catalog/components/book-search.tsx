@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useActionState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -47,7 +48,11 @@ function AddBookButton({ book }: { book: BookSearchResult }) {
   );
 }
 
-export function BookSearch() {
+type BookSearchProps = {
+  canAddToLibrary: boolean;
+};
+
+export function BookSearch({ canAddToLibrary }: BookSearchProps) {
   const [state, formAction, isPending] = useActionState(searchBooks, initialBookSearchState);
 
   return (
@@ -134,7 +139,19 @@ export function BookSearch() {
                     .filter(Boolean)
                     .join(' · ')}
                 </p>
-                <AddBookButton book={book} />
+                {canAddToLibrary ? (
+                  <AddBookButton book={book} />
+                ) : (
+                  <p className="mt-4 text-sm text-stone-600">
+                    <Link
+                      className="font-semibold text-stone-900 underline underline-offset-4"
+                      href="/sign-in?reason=sign-in-required"
+                    >
+                      Sign in
+                    </Link>{' '}
+                    to add this book to your library.
+                  </p>
+                )}
               </div>
             </li>
           ))}

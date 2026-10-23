@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { EmptyState } from '@/components/empty-state';
 import { signOut } from '@/features/auth/actions';
 import { requireUser } from '@/features/auth/require-user';
 import { BookSearch } from '@/features/catalog/components/book-search';
@@ -9,6 +10,9 @@ import { listLibraryItems } from '@/features/library/repository';
 export const metadata = {
   title: 'My library | Shelf',
 };
+
+// This private route reads the authenticated session from request cookies.
+export const instant = false;
 
 export default async function LibraryPage() {
   const { supabase } = await requireUser();
@@ -23,18 +27,26 @@ export default async function LibraryPage() {
           </Link>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight text-stone-950">My library</h1>
         </div>
-        <form action={signOut}>
-          <button
+        <div className="flex items-center gap-4">
+          <Link
             className="text-sm font-semibold text-stone-700 underline underline-offset-4 hover:text-stone-950"
-            type="submit"
+            href="/search"
           >
-            Sign out
-          </button>
-        </form>
+            Search catalog
+          </Link>
+          <form action={signOut}>
+            <button
+              className="text-sm font-semibold text-stone-700 underline underline-offset-4 hover:text-stone-950"
+              type="submit"
+            >
+              Sign out
+            </button>
+          </form>
+        </div>
       </header>
 
       <div className="mt-8 grid gap-8">
-        <BookSearch />
+        <BookSearch canAddToLibrary />
 
         <section aria-labelledby="library-heading">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -52,8 +64,11 @@ export default async function LibraryPage() {
           </div>
 
           {items.length === 0 ? (
-            <div className="mt-4 rounded-xl border border-dashed border-stone-300 bg-stone-50 p-6 text-sm text-stone-600">
-              Your library is empty. Search for a book above to add your first one.
+            <div className="mt-4">
+              <EmptyState
+                description="Search for a book above to add your first one."
+                title="Your library is empty"
+              />
             </div>
           ) : (
             <div className="mt-4 grid gap-4 lg:grid-cols-2">

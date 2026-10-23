@@ -20,6 +20,10 @@ recognition remain out of scope.
 The application uses Supabase Auth and Postgres for the private library. No production credentials
 are included in this repository.
 
+Until a Supabase project is available, the catalog search page remains usable without credentials.
+Account, private-library, and editing workflows stay disabled or redirect to sign-in until the
+required environment variables are configured; Shelf does not use a mocked production backend.
+
 ## Prerequisites
 
 - Node.js 22.12 or newer (Node 24 is used in this workspace)

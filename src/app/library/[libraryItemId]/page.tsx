@@ -8,6 +8,9 @@ import { StatusBadge } from '@/features/library/components/status-badge';
 import { getLibraryItem } from '@/features/library/repository';
 import { libraryItemIdSchema } from '@/features/library/schemas';
 
+// This private route reads the authenticated session from request cookies.
+export const instant = false;
+
 type LibraryItemPageProps = {
   params: Promise<{ libraryItemId: string }>;
 };

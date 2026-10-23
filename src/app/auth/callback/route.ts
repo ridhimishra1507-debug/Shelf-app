@@ -1,8 +1,13 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
+import { hasSupabasePublicConfig } from '@/lib/supabase/config';
 import { createClient } from '@/lib/supabase/server';
 
 export async function GET(request: NextRequest) {
+  if (!hasSupabasePublicConfig()) {
+    return NextResponse.redirect(new URL('/sign-in?reason=configuration', request.url));
+  }
+
   const code = request.nextUrl.searchParams.get('code');
 
   if (code) {

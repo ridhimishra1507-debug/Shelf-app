@@ -6,10 +6,11 @@ import { signIn, signUp } from '../actions';
 import { initialAuthActionState } from '../types';
 
 type AuthFormProps = {
+  isSupabaseConfigured: boolean;
   mode: 'sign-in' | 'sign-up';
 };
 
-export function AuthForm({ mode }: AuthFormProps) {
+export function AuthForm({ isSupabaseConfigured, mode }: AuthFormProps) {
   const [state, formAction, isPending] = useActionState(
     mode === 'sign-in' ? signIn : signUp,
     initialAuthActionState,
@@ -26,6 +27,7 @@ export function AuthForm({ mode }: AuthFormProps) {
           id="email"
           name="email"
           required
+          disabled={!isSupabaseConfigured}
           type="email"
         />
       </label>
@@ -39,6 +41,7 @@ export function AuthForm({ mode }: AuthFormProps) {
           minLength={8}
           name="password"
           required
+          disabled={!isSupabaseConfigured}
           type="password"
         />
       </label>
@@ -59,7 +62,7 @@ export function AuthForm({ mode }: AuthFormProps) {
 
       <button
         className="rounded-lg bg-stone-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-stone-700 disabled:cursor-not-allowed disabled:opacity-60"
-        disabled={isPending}
+        disabled={isPending || !isSupabaseConfigured}
         type="submit"
       >
         {isPending ? 'Please wait…' : isSignIn ? 'Sign in' : 'Create account'}
