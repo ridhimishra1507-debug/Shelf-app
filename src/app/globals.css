@@ -3,6 +3,7 @@
 :root {
   --background: #fafaf9;
   --foreground: #1c1917;
+  --library-canvas: #f7f4ee;
 }
 
 @theme inline {
@@ -16,4 +17,10 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+}
+
+.library-page {
+  background:
+    radial-gradient(circle at 12% 0%, rgb(254 243 199 / 0.55), transparent 25rem),
+    linear-gradient(180deg, var(--library-canvas), var(--background) 38rem);
 }
