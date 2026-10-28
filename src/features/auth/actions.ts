@@ -6,13 +6,24 @@ import { redirect } from 'next/navigation';
 import { hasSupabasePublicConfig } from '@/lib/supabase/config';
 import { createClient } from '@/lib/supabase/server';
 
-import { authCredentialsSchema } from './schemas';
+import { isUsernameAvailable, suggestAvailableUsername } from '@/features/profile/username-service';
+
+import { authCredentialsSchema, signUpSchema } from './schemas';
 import type { AuthActionState } from './types';
 
 function getFormCredentials(formData: FormData) {
   return authCredentialsSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
+  });
+}
+
+function getSignUpDetails(formData: FormData) {
+  return signUpSchema.safeParse({
+    displayName: formData.get('displayName'),
+    email: formData.get('email'),
+    password: formData.get('password'),
+    username: formData.get('username'),
   });
 }
 
@@ -68,30 +79,71 @@ export async function signUp(
     return { error: 'Shelf is not connected to Supabase yet. Try again after it is configured.' };
   }
 
-  const parsed = getFormCredentials(formData);
+  const parsed = getSignUpDetails(formData);
 
   if (!parsed.success) {
-    return { error: parsed.error.issues[0]?.message ?? 'Check your email and password.' };
+    return {
+      error: parsed.error.issues[0]?.message ?? 'Check your account details and try again.',
+    };
   }
 
   const supabase = await createClient();
+  let username: string | null = parsed.data.username || null;
+
+  try {
+    if (username) {
+      if (!(await isUsernameAvailable(supabase, username))) {
+        return { error: 'That username is already taken. Try another one.' };
+      }
+    } else {
+      username = await suggestAvailableUsername(supabase, parsed.data.displayName);
+
+      if (!username) {
+        return { error: 'Unable to find an available username. Try again.' };
+      }
+    }
+  } catch {
+    return { error: 'Unable to check username availability. Try again shortly.' };
+  }
+
+  if (!username) {
+    return { error: 'Unable to find an available username. Try again.' };
+  }
+
   const appUrl = await getAppUrl();
   const { data, error } = await supabase.auth.signUp({
-    ...parsed.data,
+    email: parsed.data.email,
+    password: parsed.data.password,
     options: {
+      data: {
+        display_name: parsed.data.displayName,
+        username,
+      },
       emailRedirectTo: `${appUrl}/auth/callback`,
     },
   });
 
   if (error) {
-    return { error: 'Unable to create an account. Try a different email or try again shortly.' };
+    try {
+      if (!(await isUsernameAvailable(supabase, username))) {
+        return { error: 'That username is no longer available. Try another one.' };
+      }
+    } catch {
+      // Return the generic safe fallback if availability cannot be rechecked.
+    }
+
+    return {
+      error: 'Unable to create an account. Try again shortly.',
+    };
   }
 
   if (data.session) {
     redirect('/library');
   }
 
-  return { message: 'Check your email to confirm your account, then sign in.' };
+  return {
+    message: `@${username} is reserved for your Shelf. Check your email to confirm your account, then sign in.`,
+  };
 }
 
 export async function signOut() {

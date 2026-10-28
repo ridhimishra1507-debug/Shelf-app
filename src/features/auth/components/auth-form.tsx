@@ -2,6 +2,8 @@
 
 import { useActionState } from 'react';
 
+import { IdentityFields } from '@/features/profile/components/identity-fields';
+
 import { signIn, signUp } from '../actions';
 import { initialAuthActionState } from '../types';
 
@@ -45,6 +47,8 @@ export function AuthForm({ isSupabaseConfigured, mode }: AuthFormProps) {
           type="password"
         />
       </label>
+
+      {!isSignIn ? <IdentityFields disabled={!isSupabaseConfigured || isPending} /> : null}
 
       {state.error ? (
         <p aria-live="polite" className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-800">

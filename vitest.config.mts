@@ -7,10 +7,12 @@ import { defineConfig } from 'vitest/config';
  * Aliasing it to an empty module lets unit tests import server modules directly.
  */
 const serverOnlyStub = fileURLToPath(new URL('./src/test/server-only-stub.ts', import.meta.url));
+const sourceDirectory = fileURLToPath(new URL('./src/', import.meta.url));
 
 export default defineConfig({
   resolve: {
     alias: {
+      '@': sourceDirectory,
       'server-only': serverOnlyStub,
     },
   },

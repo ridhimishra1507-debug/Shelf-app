@@ -20,6 +20,12 @@ recognition remain out of scope.
 The application uses Supabase Auth and Postgres for the private library. No production credentials
 are included in this repository.
 
+Each account also has a private Shelf identity: a case-insensitive, lowercase username and a
+preferred “Call me” name. Apply the committed migrations before testing sign-up or account
+settings. Existing Auth accounts receive an empty private profile record during the identity
+migration; no username is invented and they can choose one later from **Account** without affecting
+their existing library.
+
 Until a Supabase project is available, the catalog search page remains usable without credentials.
 Account, private-library, and editing workflows stay disabled or redirect to sign-in until the
 required environment variables are configured; Shelf does not use a mocked production backend.
@@ -60,6 +66,11 @@ npm run db:reset
 ```
 
 Never run a reset against a linked production project.
+
+For an existing hosted Supabase project, apply the new migration through the normal deployment
+workflow before deploying this application change. The migration adds the username constraints,
+backfills only missing profile rows, and exposes a boolean-only username-availability function; it
+does not require a service-role key or any manual changes in the Supabase Dashboard.
 
 ## Environment variables
 
