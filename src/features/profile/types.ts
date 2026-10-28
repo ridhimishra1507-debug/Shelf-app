@@ -1,5 +1,8 @@
+import type { ThemeId } from '@/features/theme/themes';
+
 export type Profile = {
   displayName: string | null;
+  themeId: ThemeId;
   username: string | null;
 };
 
@@ -20,3 +23,10 @@ export type UsernameSuggestionState = {
 };
 
 export const initialProfileActionState: ProfileActionState = {};
+
+export type ThemeActionState = {
+  error?: string;
+  message?: string;
+};
+
+export const initialThemeActionState: ThemeActionState = {};

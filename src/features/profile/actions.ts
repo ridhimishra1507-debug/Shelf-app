@@ -4,8 +4,8 @@ import { revalidatePath } from 'next/cache';
 
 import { requireUser } from '@/features/auth/require-user';
 
-import { profileUpdateSchema } from './schemas';
-import type { ProfileActionState } from './types';
+import { profileUpdateSchema, themeIdSchema } from './schemas';
+import type { ProfileActionState, ThemeActionState } from './types';
 
 export async function updateProfile(
   _previousState: ProfileActionState,
@@ -43,4 +43,31 @@ export async function updateProfile(
 
   revalidatePath('/account');
   return { message: 'Your Shelf identity has been saved.' };
+}
+
+export async function updateTheme(
+  _previousState: ThemeActionState,
+  formData: FormData,
+): Promise<ThemeActionState> {
+  const parsed = themeIdSchema.safeParse(formData.get('themeId'));
+
+  if (!parsed.success) {
+    return { error: 'Choose one of Shelf’s available themes.' };
+  }
+
+  const { supabase, userId } = await requireUser();
+  const { data, error } = await supabase
+    .from('profiles')
+    .update({ theme_id: parsed.data })
+    .eq('id', userId)
+    .select('id')
+    .maybeSingle();
+
+  if (error || !data) {
+    return { error: 'Unable to save your theme. Please try again.' };
+  }
+
+  revalidatePath('/', 'layout');
+  revalidatePath('/account');
+  return { message: 'Your Shelf theme has been saved.' };
 }

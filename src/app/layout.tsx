@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
-import type { ReactNode } from 'react';
+import { Suspense, type ReactNode } from 'react';
+
+import { SavedTheme } from '@/features/theme/components/saved-theme';
+import { defaultThemeId } from '@/features/theme/themes';
+
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -9,8 +13,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html className="h-full antialiased" data-theme={defaultThemeId} lang="en">
+      <body className="theme-shell min-h-full flex flex-col">
+        <Suspense fallback={null}>
+          <SavedTheme />
+        </Suspense>
+        {children}
+      </body>
     </html>
   );
 }

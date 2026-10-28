@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { themeIds } from '@/features/theme/themes';
+
 export const usernamePattern = /^[a-z0-9_]{3,30}$/;
 export const usernameRequirements = 'Use 3–30 lowercase letters, numbers, or underscores.';
 
@@ -30,3 +32,5 @@ export const profileUpdateSchema = z.object({
   displayName: displayNameSchema,
   username: usernameSchema,
 });
+
+export const themeIdSchema = z.enum(themeIds);
