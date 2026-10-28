@@ -35,6 +35,12 @@ export default async function LibraryPage() {
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
             <Link
+              className="rounded-full border border-border bg-surface px-3.5 py-2 text-sm font-semibold text-secondary transition hover:bg-elevated hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-page"
+              href="/dashboard"
+            >
+              Dashboard
+            </Link>
+            <Link
               className="rounded-full px-3.5 py-2 text-sm font-semibold text-stone-700 transition hover:bg-stone-100 hover:text-stone-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2"
               href="/account"
             >
